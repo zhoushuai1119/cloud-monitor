@@ -459,6 +459,9 @@ public class MonitorService {
     }
 
     private void reportFailedMsgs(final String consumerGroup, final String topic) {
-
+        FailedMsgs failedMsgs = new FailedMsgs();
+        failedMsgs.setConsumerGroup(consumerGroup);
+        failedMsgs.setTopic(topic);
+        monitorListener.reportFailedMsgs(failedMsgs);
     }
 }

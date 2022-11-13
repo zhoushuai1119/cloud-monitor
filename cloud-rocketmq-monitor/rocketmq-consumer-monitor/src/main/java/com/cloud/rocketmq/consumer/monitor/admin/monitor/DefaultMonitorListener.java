@@ -22,6 +22,7 @@ import com.cloud.rocketmq.consumer.monitor.admin.common.utils.MarkdownCreaterUti
 import com.cloud.rocketmq.consumer.monitor.admin.dto.PushAlterDTO;
 import com.cloud.rocketmq.consumer.monitor.admin.factory.MessageModelFactory;
 import com.cloud.rocketmq.consumer.monitor.admin.service.AlterService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.protocol.body.ConsumerRunningInfo;
 import org.apache.rocketmq.common.protocol.heartbeat.SubscriptionData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.Map.Entry;
+
 @Component
+@Slf4j
 public class DefaultMonitorListener implements MonitorListener {
     private final static String LOG_PREFIX = "";
     private final static String LOG_NOTIFY = LOG_PREFIX + "";
@@ -56,6 +59,7 @@ public class DefaultMonitorListener implements MonitorListener {
 
     @Override
     public void reportConsumerNotOnline(String consumerGroup) {
+        log.warn("消费组:{} 不在线", consumerGroup);
         PushAlterDTO pushAlterDTO = MessageModelFactory.createPushAlmDTO();
         pushAlterDTO.addLables(JobTypeEnum.REPORT_CONSUMER_NOT_ONLINE.getCode(), consumerGroup, "");
         pushAlterDTO.getAnnotations()
