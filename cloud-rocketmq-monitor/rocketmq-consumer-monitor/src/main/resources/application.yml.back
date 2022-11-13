@@ -1,0 +1,47 @@
+monitor.config:
+  roundInterval: 60000
+  undoneMessageMax: 100
+  tpsThreshold: 10000
+  diskRatioThreshold: 0.3
+---
+spring:
+  profiles: dev
+monitor.config:
+  namesrvAddr: 139.196.208.53:9876
+  tpsMax: 1
+  brokerNames:
+    - broker-a
+dingding.token: 01f681d15eccbe68b930faeab4975d81ef5a911e2e0c70ac04a5d27365b62bf9
+---
+spring:
+  profiles: qa
+monitor.config:
+  namesrvAddr: nsrv1.qa.enmonster.org:9876
+  brokerNames:
+    - broker-a
+dingding.token: 474913760429b0bba44d3e8ca341516b9e71a2c0381908412ffd5a2e33bff6aa
+---
+spring:
+  profiles: pre
+monitor.config:
+  namesrvAddr: nsrv1.pre.enmonster.org:9876
+  brokerNames:
+    - broker-a
+dingding.token: 474913760429b0bba44d3e8ca341516b9e71a2c0381908412ffd5a2e33bff6aa
+---
+spring:
+  profiles: gr
+monitor.config:
+  namesrvAddr: nsrv1.gr.enmonster.org:9876
+  brokerNames:
+    - broker-a
+dingding.token: 056db2fe57f745235b61a6e677458ddbbdb494fb84b572164078b1a43119211b
+---
+spring:
+  profiles: prd
+monitor.config:
+  namesrvAddr: nsrv1.enmonster.org:9876;nsrv2.enmonster.org:9876
+  brokerNames:
+    - broker-device-b
+    - broker-device-a
+dingding.token: e49af171fda37e2c2c214c3d2799ad6e024912a7334032dcda8979deadf0514c

@@ -1,0 +1,47 @@
+server:
+  port: 5557
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  application:
+    name: cloud-rocketmq-exporter
+
+logging:
+  config: classpath:logback.xml
+
+rocketmq:
+  config:
+    webTelemetryPath: /metrics
+    namesrvAddr: 139.196.208.53:9876
+    rocketmqVersion: 4_9_4
+    enableCollect: true
+    enableACL: true
+    accessKey: zhoushuai
+    secretKey: zs19921119
+    outOfTimeSeconds: 60 # Cache clear time with no update
+
+threadpool:
+  collect-client-metric-executor:
+    core-pool-size: 10
+    maximum-pool-size: 10
+    keep-alive-time: 3000
+    queueSize: 5000
+
+task:
+  count: 5 # num of scheduled-tasks
+  collectTopicOffset:
+    cron: 15 0/1 * * * ?
+  collectProducer:
+    cron: 15 0/1 * * * ?
+  collectConsumerOffset:
+    cron: 15 0/1 * * * ?
+  collectBrokerStatsTopic:
+    cron: 15 0/1 * * * ?
+  collectBrokerStats:
+    cron: 15 0/1 * * * ?
+  collectBrokerRuntimeStats:
+    cron: 15 0/1 * * * ?

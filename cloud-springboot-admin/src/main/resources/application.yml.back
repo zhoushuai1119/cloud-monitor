@@ -1,0 +1,36 @@
+server:
+  port: 8013
+
+spring:
+  application:
+    name: cloud-springboot-monitor
+
+  boot:
+    admin:
+      ui:
+        title: Cloud Monitoring Center
+        brand: <span>Service Monitoring Center</span>
+
+  security:
+    user:
+      name: admin
+      password: admin
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 139.196.208.53:8848
+        username: nacos
+        password: nacos
+        metadata:
+          user.name: ${spring.security.user.name}
+          user.password: ${spring.security.user.password}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS

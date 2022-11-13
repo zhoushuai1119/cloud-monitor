@@ -1,0 +1,21 @@
+dingding.token: 474913760429b0bba44d3e8ca341516b9e71a2c0381908412ffd5a2e33bff6aa
+---
+spring:
+  profiles: dev
+dingding.token: 474913760429b0bba44d3e8ca341516b9e71a2c0381908412ffd5a2e33bff6aa
+---
+spring:
+  profiles: qa
+dingding.token: 474913760429b0bba44d3e8ca341516b9e71a2c0381908412ffd5a2e33bff6aa
+---
+spring:
+  profiles: pre
+dingding.token: 474913760429b0bba44d3e8ca341516b9e71a2c0381908412ffd5a2e33bff6aa
+---
+spring:
+  profiles: gr
+dingding.token: 056db2fe57f745235b61a6e677458ddbbdb494fb84b572164078b1a43119211b
+---
+spring:
+  profiles: prd
+dingding.token: e49af171fda37e2c2c214c3d2799ad6e024912a7334032dcda8979deadf0514c
