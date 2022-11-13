@@ -16,6 +16,8 @@
  */
 package org.apache.rocketmq.exporter.config;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.common.MixAll;
 import org.slf4j.Logger;
@@ -50,10 +52,16 @@ public class RMQConfigure {
      */
     private boolean enableACL = false;
 
+    @Getter
+    @Setter
     private String accessKey;
 
+    @Getter
+    @Setter
     private String secretKey;
 
+    @Getter
+    @Setter
     private long outOfTimeSeconds;
 
     public boolean enableACL() {
@@ -120,27 +128,4 @@ public class RMQConfigure {
         return rocketmqVersion;
     }
 
-    public String getAccessKey() {
-        return accessKey;
-    }
-
-    public void setAccessKey(String accessKey) {
-        this.accessKey = accessKey;
-    }
-
-    public String getSecretKey() {
-        return secretKey;
-    }
-
-    public void setSecretKey(String secretKey) {
-        this.secretKey = secretKey;
-    }
-
-    public long getOutOfTimeSeconds() {
-        return outOfTimeSeconds;
-    }
-
-    public void setOutOfTimeSeconds(long outOfTimeSeconds) {
-        this.outOfTimeSeconds = outOfTimeSeconds;
-    }
 }
