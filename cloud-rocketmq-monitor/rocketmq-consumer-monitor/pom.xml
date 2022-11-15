@@ -32,24 +32,31 @@
             <version>${rocketmq-version}</version>
         </dependency>
         <!-- apollo配置中心 -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.ctrip.framework.apollo</groupId>
             <artifactId>apollo-client</artifactId>
-        </dependency>
+        </dependency>-->
         <!--集成工具包-->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
         </dependency>
+        <!--dingtalk-->
         <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
+            <groupId>io.github.zhoushuai1119</groupId>
+            <artifactId>cloud-dingtalk-spring-boot-starter</artifactId>
+            <version>${cloud.dingtalk.version}</version>
         </dependency>
     </dependencies>
 
     <build>
         <finalName>rocketmq-consumer-monitor</finalName>
-
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
     </build>
 
 </project>

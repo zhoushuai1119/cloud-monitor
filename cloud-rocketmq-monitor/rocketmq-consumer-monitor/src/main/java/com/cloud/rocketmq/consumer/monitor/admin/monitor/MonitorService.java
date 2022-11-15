@@ -21,7 +21,6 @@ import com.cloud.rocketmq.consumer.monitor.admin.admin.DefaultMQAdminExt;
 import com.cloud.rocketmq.consumer.monitor.admin.common.enums.JobTypeEnum;
 import com.cloud.rocketmq.consumer.monitor.admin.dto.BrokerStatusDTO;
 import com.cloud.rocketmq.consumer.monitor.admin.dto.PushAlterDTO;
-import com.cloud.rocketmq.consumer.monitor.admin.factory.MessageModelFactory;
 import com.cloud.rocketmq.consumer.monitor.admin.service.AlterService;
 import com.google.common.collect.Maps;
 import org.apache.rocketmq.acl.common.AclClientRPCHook;
@@ -188,18 +187,20 @@ public class MonitorService {
                 try {
                     doConsumerMonitorWork();
                 } catch (Exception e) {
-                    PushAlterDTO pushAlterDTO = MessageModelFactory.createPushAlmDTO();
-                    pushAlterDTO.addLables(JobTypeEnum.MONITOR_WORK_EXCEPTION.getCode(), "", "doConsumerMonitorWork");
-                    pushAlterDTO.getAnnotations().setAlarmContent(String.format("doConsumerMonitorWork \n%s", e));
+                    PushAlterDTO pushAlterDTO = PushAlterDTO.builder()
+                            .alarmType(JobTypeEnum.MONITOR_WORK_EXCEPTION.getCode())
+                            .alarmContent(String.format("doConsumerMonitorWork \n%s", e))
+                            .build();
                     alterService.alterPost(pushAlterDTO);
                     log.error("doConsumerMonitorWork",e);
                 }
                 try {
                     doBrokerMonitorWork();
                 } catch (Exception e) {
-                    PushAlterDTO pushAlterDTO = MessageModelFactory.createPushAlmDTO();
-                    pushAlterDTO.addLables(JobTypeEnum.MONITOR_WORK_EXCEPTION.getCode(), "", "doBrokerMonitorWork");
-                    pushAlterDTO.getAnnotations().setAlarmContent(String.format("doBrokerMonitorWork \n%s", e));
+                    PushAlterDTO pushAlterDTO = PushAlterDTO.builder()
+                            .alarmType(JobTypeEnum.MONITOR_WORK_EXCEPTION.getCode())
+                            .alarmContent(String.format("doBrokerMonitorWork \n%s", e))
+                            .build();
                     alterService.alterPost(pushAlterDTO);
                     log.error("doBrokerMonitorWork",e);
                 }

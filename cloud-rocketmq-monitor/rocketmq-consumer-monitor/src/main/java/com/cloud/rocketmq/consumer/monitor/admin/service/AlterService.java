@@ -12,4 +12,5 @@ import com.cloud.rocketmq.consumer.monitor.admin.dto.PushAlterDTO;
 public interface AlterService {
 
     void alterPost(PushAlterDTO pushAlterDTO);
+
 }
