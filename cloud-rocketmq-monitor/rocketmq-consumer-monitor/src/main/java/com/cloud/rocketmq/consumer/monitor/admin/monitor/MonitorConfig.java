@@ -63,11 +63,6 @@ public class MonitorConfig {
      */
     private int blockedMessageTotal = 6000;
 
-    private String MSGToken;
-    private String alterManagerToken;
-    private String alterUri = "http://10.22.88.16:32093/api/v1/alerts";
-    private String msgUri = "https://oapi.dingtalk.com/robot/send";
-
     /**
      * 最大消息积累量，消费者 topic 维度
      */

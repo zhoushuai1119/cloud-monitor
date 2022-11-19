@@ -20,7 +20,6 @@ package com.cloud.rocketmq.consumer.monitor.admin.monitor;
 import com.cloud.rocketmq.consumer.monitor.admin.common.enums.JobTypeEnum;
 import com.cloud.rocketmq.consumer.monitor.admin.common.utils.MarkdownCreaterUtil;
 import com.cloud.rocketmq.consumer.monitor.admin.dto.PushAlterDTO;
-import com.cloud.rocketmq.consumer.monitor.admin.factory.MessageModelFactory;
 import com.cloud.rocketmq.consumer.monitor.admin.service.AlterService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.protocol.body.ConsumerRunningInfo;
@@ -40,6 +39,7 @@ public class DefaultMonitorListener implements MonitorListener {
     private AlterService alterService;
 
     public DefaultMonitorListener() {
+
     }
 
     @Override
@@ -49,43 +49,49 @@ public class DefaultMonitorListener implements MonitorListener {
 
     @Override
     public void reportUndoneMsgs(UndoneMsgs undoneMsgs) {
-        PushAlterDTO pushAlterDTO = MessageModelFactory.createPushAlmDTO();
-        String jobType = JobTypeEnum.REPORT_UNDONE_MSGS.getCode();
-        pushAlterDTO.addLables(jobType, undoneMsgs.getConsumerGroup(), undoneMsgs.getTopic());
-        pushAlterDTO.getAnnotations()
-                .setAlarmContent(String.format(LOG_PREFIX + "reportUndoneMsgs: %s", undoneMsgs));
+        PushAlterDTO pushAlterDTO = PushAlterDTO.builder()
+                .alarmType(JobTypeEnum.REPORT_UNDONE_MSGS.getCode())
+                .alarmContent(String.format(LOG_PREFIX + "reportUndoneMsgs: %s", undoneMsgs))
+                .consumerGroup(undoneMsgs.getConsumerGroup())
+                .extendedField(undoneMsgs.getTopic())
+                .build();
         alterService.alterPost(pushAlterDTO);
     }
 
     @Override
     public void reportConsumerNotOnline(String consumerGroup) {
-        log.warn("消费组:{} 不在线", consumerGroup);
-        PushAlterDTO pushAlterDTO = MessageModelFactory.createPushAlmDTO();
-        pushAlterDTO.addLables(JobTypeEnum.REPORT_CONSUMER_NOT_ONLINE.getCode(), consumerGroup, "");
-        pushAlterDTO.getAnnotations()
-                .setAlarmContent(String.format("消费组不在线: %s", consumerGroup));
+        PushAlterDTO pushAlterDTO = PushAlterDTO.builder()
+                .alarmType(JobTypeEnum.REPORT_CONSUMER_NOT_ONLINE.getCode())
+                .alarmContent(String.format("消费组不在线: %s", consumerGroup))
+                .consumerGroup(consumerGroup)
+                .build();
         alterService.alterPost(pushAlterDTO);
     }
 
     @Override
     public void reportFailedMsgs(FailedMsgs failedMsgs) {
-        PushAlterDTO pushAlterDTO = MessageModelFactory.createPushAlmDTO();
-        pushAlterDTO.addLables(JobTypeEnum.REPORT_FAILED_MSGS.getCode(), failedMsgs.getConsumerGroup(), failedMsgs.getTopic());
-        pushAlterDTO.getAnnotations()
-                .setAlarmContent(String.format(LOG_PREFIX + "reportFailedMsgs: %s", failedMsgs));
+        PushAlterDTO pushAlterDTO = PushAlterDTO.builder()
+                .alarmType(JobTypeEnum.REPORT_FAILED_MSGS.getCode())
+                .alarmContent(String.format(LOG_PREFIX + "reportFailedMsgs: %s", failedMsgs))
+                .consumerGroup(failedMsgs.getConsumerGroup())
+                .extendedField(failedMsgs.getTopic())
+                .build();
         alterService.alterPost(pushAlterDTO);
     }
 
     @Override
     public void reportDeleteMsgsEvent(DeleteMsgsEvent deleteMsgsEvent) {
-        PushAlterDTO pushAlterDTO = MessageModelFactory.createPushAlmDTO();
         String consumerGroup = Optional.ofNullable(deleteMsgsEvent.getOffsetMovedEvent().getConsumerGroup())
                 .orElse(deleteMsgsEvent.toString());
         String extendedField = Optional.ofNullable(deleteMsgsEvent.getOffsetMovedEvent().getMessageQueue().toString())
                 .orElse(deleteMsgsEvent.toString());
-        pushAlterDTO.addLables(JobTypeEnum.REPORT_DELETE_MSGS_EVENT.getCode(), consumerGroup, extendedField);
-        pushAlterDTO.getAnnotations()
-                .setAlarmContent(String.format(LOG_PREFIX + "reportDeleteMsgsEvent: %s", deleteMsgsEvent));
+
+        PushAlterDTO pushAlterDTO = PushAlterDTO.builder()
+                .alarmType(JobTypeEnum.REPORT_DELETE_MSGS_EVENT.getCode())
+                .alarmContent(String.format(LOG_PREFIX + "reportDeleteMsgsEvent: %s", deleteMsgsEvent))
+                .consumerGroup(consumerGroup)
+                .extendedField(extendedField)
+                .build();
         alterService.alterPost(pushAlterDTO);
     }
 
@@ -109,12 +115,12 @@ public class DefaultMonitorListener implements MonitorListener {
                     }
                 }
 
-                PushAlterDTO pushAlterDTO = MessageModelFactory.createPushAlmDTO();
-                pushAlterDTO.addLables(JobTypeEnum.SUBSCRIPTION_DIFFERENT.getCode(), consumerGroup, "");
-                pushAlterDTO.getAnnotations()
-                        .setAlarmContent(String.format(LOG_NOTIFY
+                PushAlterDTO pushAlterDTO = PushAlterDTO.builder()
+                        .alarmType(JobTypeEnum.SUBSCRIPTION_DIFFERENT.getCode())
+                        .alarmContent(String.format(LOG_NOTIFY
                                         + "同一消费组订阅信息不一致告警: ConsumerGroup: %s, Subscription different \n%s",
-                                consumerGroup, MarkdownCreaterUtil.listMarkdown(details)));
+                                consumerGroup, MarkdownCreaterUtil.listMarkdown(details)))
+                        .build();
                 alterService.alterPost(pushAlterDTO);
             }
         }
@@ -127,11 +133,13 @@ public class DefaultMonitorListener implements MonitorListener {
                 if (!result.isEmpty()) {
                     String clientId = next.getKey();
 
-                    PushAlterDTO pushAlterDTO = MessageModelFactory.createPushAlmDTO();
-                    pushAlterDTO.addLables(JobTypeEnum.CONSUMER_GROUP_BLOCK.getCode(), consumerGroup, next.getKey());
-                    pushAlterDTO.getAnnotations()
-                            .setAlarmContent(String.format(LOG_NOTIFY + "消费者阻塞告警: ConsumerGroup: %s, ClientId: %s, %s",
-                                    consumerGroup, clientId, result));
+                    PushAlterDTO pushAlterDTO = PushAlterDTO.builder()
+                            .alarmType(JobTypeEnum.CONSUMER_GROUP_BLOCK.getCode())
+                            .alarmContent(String.format(LOG_NOTIFY + "消费者阻塞告警: ConsumerGroup: %s, ClientId: %s, %s",
+                                    consumerGroup, clientId, result))
+                            .consumerGroup(consumerGroup)
+                            .extendedField(next.getKey())
+                            .build();
                     alterService.alterPost(pushAlterDTO);
                 }
             }
@@ -140,19 +148,20 @@ public class DefaultMonitorListener implements MonitorListener {
 
     @Override
     public void reportStopedBroker(List<String> brokerNames) {
-        PushAlterDTO pushAlterDTO = MessageModelFactory.createPushAlmDTO();
-        pushAlterDTO.addLables(JobTypeEnum.REPORT_STOPED_BROKER.getCode(), brokerNames.toString(), "");
-        pushAlterDTO.getAnnotations()
-                .setAlarmContent(String.format(LOG_PREFIX + "broker未启动: %s", brokerNames));
+        PushAlterDTO pushAlterDTO = PushAlterDTO.builder()
+                .alarmType(JobTypeEnum.REPORT_STOPED_BROKER.getCode())
+                .alarmContent(String.format(LOG_PREFIX + "broker未启动: %s", brokerNames))
+                .extendedField(brokerNames.toString())
+                .build();
         alterService.alterPost(pushAlterDTO);
     }
 
     @Override
     public void reportRiskedBroker(Map<String, Map<String, String>> notifyTable) {
-        PushAlterDTO pushAlterDTO = MessageModelFactory.createPushAlmDTO();
-        pushAlterDTO.addLables(JobTypeEnum.REPORT_RISKED_BROKER.getCode(), "", "");
-        pushAlterDTO.getAnnotations()
-                .setAlarmContent(String.format(LOG_PREFIX + "broker运行状态: \n%s", MarkdownCreaterUtil.listMarkdown(notifyTable)));
+        PushAlterDTO pushAlterDTO = PushAlterDTO.builder()
+                .alarmType(JobTypeEnum.REPORT_RISKED_BROKER.getCode())
+                .alarmContent(String.format(LOG_PREFIX + "broker运行状态: \n%s", MarkdownCreaterUtil.listMarkdown(notifyTable)))
+                .build();
         alterService.alterPost(pushAlterDTO);
     }
 

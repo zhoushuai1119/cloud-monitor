@@ -1,0 +1,26 @@
+server:
+  port: 8077
+
+spring:
+  application:
+    name: rocketmq-consumer-monitor
+
+  profiles:
+    active: dev
+
+  dinger:
+    project-id: ${spring.application.name}
+    default-dinger: wetalk
+    dingers:
+      wetalk:
+        token-id: 0a0b9279-ac5b-4b95-bb69-e30a9dde286e
+
+monitor:
+  config:
+    namesrvAddr: 139.196.208.53:9876
+    brokerNames:
+      - broker-a
+    undoneMessageMax: 500
+    undoneMessageMaxTimeMs: 60000
+    tpsThreshold: 1000
+    diskRatioThreshold: 0.45

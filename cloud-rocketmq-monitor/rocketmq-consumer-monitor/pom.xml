@@ -45,11 +45,22 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
+        <!--dingtalk-->
+        <dependency>
+            <groupId>io.github.zhoushuai1119</groupId>
+            <artifactId>cloud-dingtalk-spring-boot-starter</artifactId>
+            <version>${cloud.dingtalk.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
         <finalName>rocketmq-consumer-monitor</finalName>
-
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
     </build>
 
 </project>
