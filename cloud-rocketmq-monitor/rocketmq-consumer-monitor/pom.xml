@@ -33,7 +33,7 @@
         </dependency>
         <!-- apollo配置中心 -->
         <dependency>
-            <groupId>com.ctrip.framework.apollo</groupId>
+            <groupId>io.github.zhoushuai1119</groupId>
             <artifactId>apollo-client</artifactId>
         </dependency>
         <!--集成工具包-->

@@ -27,7 +27,7 @@
         </dependency>
         <!-- apollo配置中心 -->
         <dependency>
-            <groupId>com.ctrip.framework.apollo</groupId>
+            <groupId>io.github.zhoushuai1119</groupId>
             <artifactId>apollo-client</artifactId>
         </dependency>
         <!-- admin server 依赖 -->
